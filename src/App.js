@@ -14,22 +14,48 @@ function App() {
 const [tour, settour] = useState([]);
 const [loading, setloading] = useState(true);
 //fetch the data from api useeffect
+function removeTour(id){
+  const newTour = tour.filter((t) => t.id !== id)
+  settour(newTour)
+}
+
+const fetchTours = async () => {
+  setloading(true)
+  try {
+    const response = await fetch(url)
+    const tours = await response.json()
+    setloading(false)
+    settour(tours)
+  } catch (error) {
+    setloading(false)
+    console.log(error)
+  }
+}
+
+
 useEffect(() => {
-  fetch(url)
-  .then(res => res.json())
-  .then(
-    (result) => {
-      settour(result);
-      setloading(false);
-    }
-  )
+  fetchTours();
 }, []);
 
   if (loading) {
-    return <Loading />
+    return(<main>
+       <Loading />;
+    </main>)
+  }
+
+  if(tour.length === 0){
+    return(
+      <main className='title'>
+        <h2>
+          No Tours Left
+        </h2>
+        <button className='btn' onClick={()=> fetchTours()}>Refresh</button>
+      </main>
+
+    )
   }
   return (<main>
-            <Tours tours = {tour} />
+            <Tours tours = {tour} removeTour = {removeTour}/>
           </main>)
 }
 
