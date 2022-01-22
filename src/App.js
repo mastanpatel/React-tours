@@ -28,10 +28,9 @@ useEffect(() => {
   if (loading) {
     return <Loading />
   }
-  return (<>
-        
-        <Tours tours = {tour} />
-  </>)
+  return (<main>
+            <Tours tours = {tour} />
+          </main>)
 }
 
 export default App
